@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="robot">
+ 
+    <material name="white">
+        <color rgba="1 1 1 1"/>
+    </material>
+
+
+
+    <!-- Base link, true, non-relative 0,0,0 of world -->
+    <link name="world"></link>
+
+    <!-- connection from the world, to the base of the arm-->
+    <joint name="base_joint" type="fixed">
+        <!-- The base of the arm is at 0,0,0 -->
+        <origin xyz="0.5 0.5 0" rpy="0 0 0"/>
+        <!-- subordinate joing to the world -->
+        <parent link="world"/>
+        <!-- the 'child' link, or next in heirarchy -->
+        <child link="base"/>
+
+        <!-- <limit /> -->
+
+    </joint>
+
+
+    <!-- the "Base" of the robotic arm -->
+    <link name="base">
+        <visual>
+            <!-- start slightly offset, so link is at base of cylinder -->
+            <origin xyz="0 0 0.05" rpy="0 0 0"/>
+            <geometry>
+                <cylinder length="0.1" radius="0.5"/>
+            </geometry>
+            <material name="white"/>
+        </visual>
+    </link>
+
+
+    <!-- http://wiki.ros.org/urdf/XML/joint -->
+    <joint name="base-to-section1" type="revolute">
+        <origin xyz="0 0 0.1"/>
+        <parent link="base"/>
+        <child link="section1"/>
+        <!-- axis of rotation, normalized -->
+        <axis xyz="0 0 1"/>
+
+        <!-- limits of rotation (in radians) and movement -->
+        <!-- TODO it might be nice to figure out how to 'macro' pi
+        something like "${pi}" is possible but this is just a 
+        simple test for now... -->
+        <limit lower="0" upper="3.14159" effort="100" velocity="100"/>
+        
+
+    </joint>
+
+    
+    <link name="section1">
+        <visual>
+            <!-- start slightly offset, so link is at base of cylinder -->
+            <origin xyz="0 0 0.5" rpy="0 0 0"/>
+            <geometry>
+                <box size="0.5 0.25 1"/>
+            </geometry>
+            <material name="white"/>
+        </visual>
+    </link>
+    
+
+
+</robot>
