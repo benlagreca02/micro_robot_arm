@@ -18,7 +18,7 @@ ros2 run joint_state_publisher_gui joint_state_publisher_gui
 ```
 
 ## Helpful links
-[ROS link docs] (http://wiki.ros.org/urdf/XML/link)
-[ROS joint docs] (http://wiki.ros.org/urdf/XML/joint)
-[Gazebo element] (http://wiki.ros.org/urdf/XML/Gazebo) (which won't be needed
+[ROS link docs](http://wiki.ros.org/urdf/XML/link)
+[ROS joint docs](http://wiki.ros.org/urdf/XML/joint)
+[Gazebo element](http://wiki.ros.org/urdf/XML/Gazebo) (which won't be needed
 for quite some time)
