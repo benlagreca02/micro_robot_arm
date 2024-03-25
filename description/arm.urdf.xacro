@@ -103,8 +103,7 @@
             <geometry>
                 <box size="0.5 1.25 3"/>
             </geometry>
-            <material name="white"/>
-        </visual>
+            <material name="white"/> </visual>
     </link>
 
 
@@ -142,6 +141,24 @@
                 <box size="0.5 1.25 3"/>
             </geometry>
             <material name="red"/>
+        </visual>
+    </link>
+
+    <joint name="gripper" type="revolute">
+        <parent link="s3"/>
+        <child link="grip-stick"/>
+        <origin xyz="0 0 3"/>
+        <axis xyz="0 0 1"/>
+        <limit lower="-1.570796" upper="1.570796" effort="100" velocity="100"/>
+    </joint>
+
+    <link name="grip-stick">
+        <visual>
+            <origin xyz="0 0.5 0.125" rpy="1.570796 0 0"/>  <!-- 'grip sticks' radius is offset -->
+            <geometry>
+                <cylinder length="1" radius="0.125"/>
+            </geometry>
+            <material name="white"/>
         </visual>
     </link>
 
