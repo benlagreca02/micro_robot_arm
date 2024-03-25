@@ -5,13 +5,19 @@
         <color rgba="1 1 1 1"/>
     </material>
 
+    <material name="blue">
+        <color rgba="0 0 1 1"/>
+    </material>
 
+    <material name="red">
+        <color rgba="1 0 0 1"/>
+    </material>
 
     <!-- Base link, true, non-relative 0,0,0 of world -->
     <link name="world"></link>
 
     <!-- connection from the world, to the base of the arm-->
-    <joint name="base_joint" type="fixed">
+    <joint name="world-to-base" type="fixed">
         <!-- The base of the arm is at 0,0,0 -->
         <origin xyz="0.5 0.5 0" rpy="0 0 0"/>
         <!-- subordinate joing to the world -->
@@ -23,14 +29,13 @@
 
     </joint>
 
-
     <!-- the "Base" of the robotic arm -->
     <link name="base">
         <visual>
             <!-- start slightly offset, so link is at base of cylinder -->
-            <origin xyz="0 0 0.05" rpy="0 0 0"/>
+            <origin xyz="0 0 0.75" rpy="0 0 0"/>
             <geometry>
-                <cylinder length="0.1" radius="0.5"/>
+                <box size="2 2 1.5"/>
             </geometry>
             <material name="white"/>
         </visual>
@@ -38,10 +43,10 @@
 
 
     <!-- http://wiki.ros.org/urdf/XML/joint -->
-    <joint name="base-to-section1" type="revolute">
-        <origin xyz="0 0 0.1"/>
+    <joint name="base-to-circle" type="revolute">
+        <origin xyz="0 0 1.5"/>
         <parent link="base"/>
-        <child link="section1"/>
+        <child link="circle"/>
         <!-- axis of rotation, normalized -->
         <axis xyz="0 0 1"/>
 
@@ -50,22 +55,58 @@
         something like "${pi}" is possible but this is just a 
         simple test for now... -->
         <limit lower="0" upper="3.14159" effort="100" velocity="100"/>
-        
-
     </joint>
 
     
-    <link name="section1">
+    <!-- TODO Should really come up with a better name for this part... -->
+    <!-- Represents the 'circle' piece that sits above the base of the robot arm -->
+    <link name="circle">
         <visual>
             <!-- start slightly offset, so link is at base of cylinder -->
-            <origin xyz="0 0 0.5" rpy="0 0 0"/>
+            <origin xyz="0 0 0.0625" rpy="0 0 0"/>
             <geometry>
-                <box size="0.5 0.25 1"/>
+                <cylinder radius="0.75" length="0.125"/>
+            </geometry>
+            <material name="blue"/>
+        </visual>
+    </link>
+
+
+    <joint name="circle-to-s0" type="fixed">
+        <parent link="circle"/>
+        <child link="s0"/>
+        <origin xyz="0 0 0.0625"/>
+    </joint>
+
+    <link name="s0">
+        <visual>
+            <origin xyz="0 0 0.25"/>
+            <geometry>
+                <box size="0.5 1.25 0.5"/>
+            </geometry>
+            <material name="red"/>
+        </visual>
+    </link>
+
+    <!-- The first real "arm" servo -->
+    <joint name="s0-to-s1" type="revolute">
+        <parent link="s0"/>
+        <child link="s1"/>
+        <origin xyz="0 0 0.25"/>
+        <axis xyz="0 -1 0"/>
+        <limit lower="0" upper="3.14159" effort="100" velocity="100"/>
+    </joint>
+
+    <link name="s1">
+        <visual>
+            <origin xyz="1.5 0 0"/>
+            <geometry>
+                <box size="3 1.25 0.5"/>
             </geometry>
             <material name="white"/>
         </visual>
     </link>
-    
+
 
 
 </robot>
