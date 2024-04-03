@@ -25,8 +25,14 @@ def generate_launch_description():
         parameters=[{'robot_description': robot_description_raw}] # add other parameters here if required
     )
 
+    jointSubscriber = Node(
+        package='micro_robot_arm',
+        executable='piJointListener'
+    )
+
 
     # Run the node
     return LaunchDescription([
-        node_robot_state_publisher
+        node_robot_state_publisher,
+        jointSubscriber
     ])
