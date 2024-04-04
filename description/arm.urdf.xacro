@@ -1,6 +1,21 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="robot">
- 
+
+<xacro:macro name="microServo" params="parent child origin axis">
+    <joint name="${parent}-to-${child}-servo" type="revolute">
+        <origin xyz="${origin}"/>
+        <parent link="${parent}"/>
+        <child link="${child}"/>
+        <!-- axis of rotation, normalized -->
+        <axis xyz="${axis}"/>
+        <!-- limits of rotation (in radians) and movement -->
+        <!-- TODO it might be nice to figure out how to 'macro' pi
+        something like "${pi}" is possible but this is just a 
+        simple test for now... -->
+        <limit lower="-1.570796" upper="1.570796" effort="100" velocity="100"/>
+    </joint>
+</xacro:macro>
+
     <material name="white">
         <color rgba="1 1 1 1"/>
     </material>
@@ -16,7 +31,7 @@
     <!-- Base link, true, non-relative 0,0,0 of world -->
     <link name="world"></link>
 
-    <!-- connection from the world, to the base of the arm-->
+
     <joint name="world-to-base" type="fixed">
         <!-- The base of the arm is at 0,0,0 -->
         <origin xyz="0.5 0.5 0" rpy="0 0 0"/>
@@ -24,39 +39,27 @@
         <parent link="world"/>
         <!-- the 'child' link, or next in heirarchy -->
         <child link="base"/>
-
-        <!-- <limit /> -->
-
     </joint>
 
+
+
     <!-- the "Base" of the robotic arm -->
+    <xacro:property name="base_dimensions" value="2 2 1.5"/>
+
     <link name="base">
         <visual>
             <!-- start slightly offset, so link is at base of cylinder -->
             <origin xyz="0 0 0.75" rpy="0 0 0"/>
             <geometry>
-                <box size="2 2 1.5"/>
+                <box size="${base_dimensions}"/>
             </geometry>
-            <material name="white"/>
+            <material name="red"/>
         </visual>
     </link>
 
 
-    <!-- http://wiki.ros.org/urdf/XML/joint -->
-    <joint name="base-to-circle" type="revolute">
-        <origin xyz="0 0 1.5"/>
-        <parent link="base"/>
-        <child link="circle"/>
-        <!-- axis of rotation, normalized -->
-        <axis xyz="0 0 1"/>
 
-        <!-- limits of rotation (in radians) and movement -->
-        <!-- TODO it might be nice to figure out how to 'macro' pi
-        something like "${pi}" is possible but this is just a 
-        simple test for now... -->
-        <limit lower="-1.570796" upper="1.570796" effort="100" velocity="100"/>
-    </joint>
-
+    <xacro:microServo parent="base" child="circle" origin="0 0 1.5" axis="0 0 1"/>
     
     <!-- TODO Should really come up with a better name for this part... -->
     <!-- Represents the 'circle' piece that sits above the base of the robot arm -->
@@ -71,13 +74,14 @@
         </visual>
     </link>
 
-
     <joint name="circle-to-s0" type="fixed">
         <parent link="circle"/>
         <child link="s0"/>
         <origin xyz="0 0 0.0625"/>
     </joint>
 
+    <!-- representation of base of the arm --> 
+    <!-- between the circle and first real arm segment s1 -->
     <link name="s0">
         <visual>
             <origin xyz="0 0 0.25"/>
@@ -88,14 +92,8 @@
         </visual>
     </link>
 
-    <!-- The first real "arm" servo -->
-    <joint name="s0-to-s1" type="revolute">
-        <parent link="s0"/>
-        <child link="s1"/>
-        <origin xyz="0 0 0.25"/>
-        <axis xyz="0 -1 0"/>
-        <limit lower="-1.570796" upper="1.570796" effort="100" velocity="100"/>
-    </joint>
+    <!-- The first real "arm" servo, may want to be +1 instead but will have to update servo code?-->
+    <xacro:microServo parent="s0" child="s1" origin="0 0 0.25" axis="0 -1 0"/>
 
     <link name="s1">
         <visual>
@@ -103,17 +101,11 @@
             <geometry>
                 <box size="0.5 1.25 3"/>
             </geometry>
-            <material name="white"/> </visual>
+            <material name="white"/> 
+        </visual>
     </link>
 
-
-    <joint name="s1-to-s2" type="revolute">
-        <parent link="s1"/>
-        <child link="s2"/>
-        <origin xyz="0 0 3"/>
-        <axis xyz="0 -1 0"/>
-        <limit lower="-1.570796" upper="1.570796" effort="100" velocity="100"/>
-    </joint>
+    <xacro:microServo parent="s1" child="s2" origin="0 0 3" axis="0 -1 0"/>
 
     <link name="s2">
         <visual>
@@ -126,13 +118,7 @@
     </link>
  
 
-    <joint name="s2-to-s3" type="revolute">
-        <parent link="s2"/>
-        <child link="s3"/>
-        <origin xyz="0 0 3"/>
-        <axis xyz="0 -1 0"/>
-        <limit lower="-1.570796" upper="1.570796" effort="100" velocity="100"/>
-    </joint>
+    <xacro:microServo parent="s2" child="s3" origin="0 0 3" axis="0 -1 0"/>
 
     <link name="s3">
         <visual>
@@ -144,13 +130,7 @@
         </visual>
     </link>
 
-    <joint name="gripper" type="revolute">
-        <parent link="s3"/>
-        <child link="grip-stick"/>
-        <origin xyz="0 0 3"/>
-        <axis xyz="0 0 1"/>
-        <limit lower="-1.570796" upper="1.570796" effort="100" velocity="100"/>
-    </joint>
+    <xacro:microServo parent="s3" child="grip-stick" origin="0 0 3" axis="0 0 1"/>
 
     <link name="grip-stick">
         <visual>
