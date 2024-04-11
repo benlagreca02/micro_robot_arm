@@ -16,11 +16,11 @@ class JointSubscriber(Node):
     #! Map joint names to channel numbers. This is something we should specify in the urdf or a separate config file.
     #! Should also include addition tunning parameters, for now just min/max pulse width
     SERVO_MAP = {
-        'base-to-circle':0,
-        's0-to-s1':1,
-        's1-to-s2':2,
-        's2-to-s3':3,
-        'gripper':4
+        'base-to-circle': {'ID':0, 'min':500,'max':2500,'offset':0},
+        's0-to-s1': {'ID':1, 'min':500,'max':2500,'offset':-13.35},
+        's1-to-s2': {'ID':2, 'min':500,'max':2500,'offset':0},
+        's2-to-s3': {'ID':3, 'min':500,'max':2500,'offset':0},
+        'gripper': {'ID':4, 'min':500,'max':2500,'offset':0}
     }
 
     def __init__(self):
@@ -36,7 +36,8 @@ class JointSubscriber(Node):
         if(system == PI_NAME):
             self.kit = ServoKit(channels=16)
             #TODO servo tunning
-            # self.kit.servo[0].set_pulse_width_range(1000, 2000) 
+            for k,v in JointSubscriber.SERVO_MAP.items():
+                self.kit.servo[v['ID']].set_pulse_width_range(v['min'], v['max'])
 
 
 
@@ -53,8 +54,8 @@ class JointSubscriber(Node):
         if(system == PI_NAME):
             for joint, jointPos in joint_positions.items():
                 if joint in JointSubscriber.SERVO_MAP:
-                    self.get_logger().info(f"setting '{joint}'({JointSubscriber.SERVO_MAP[joint]}) to {jointPos}")
-                    self.kit.servo[JointSubscriber.SERVO_MAP[joint]].angle = jointPos + 90
+                    self.get_logger().info(f"setting '{joint}'({JointSubscriber.SERVO_MAP[joint]['ID']}) to {jointPos + 90 + JointSubscriber.SERVO_MAP[joint]['offset']}")
+                    self.kit.servo[JointSubscriber.SERVO_MAP[joint]['ID']].angle = jointPos + 90 + JointSubscriber.SERVO_MAP[joint]['offset']
 
 def main(args=None):
     rclpy.init(args=args)

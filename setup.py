@@ -13,6 +13,7 @@ setup(
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
         (os.path.join('share', package_name, 'launch'), glob('launch/*.launch.py')),
+        (os.path.join('share', package_name, 'launch'), glob('launch/config.rviz')),
         (os.path.join('share', package_name, 'description'), glob('description/*')),
     ],
     install_requires=['setuptools'],

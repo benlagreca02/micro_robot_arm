@@ -30,9 +30,8 @@ def generate_launch_description():
         executable='piJointListener'
     )
 
-
     # Run the node
     return LaunchDescription([
         node_robot_state_publisher,
-        jointSubscriber
+        jointSubscriber,
     ])
