@@ -1,44 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="robot">
 
-<xacro:macro name="microServo" params="parent child origin axis">
-    <joint name="${parent}-to-${child}-servo" type="revolute">
-        <origin xyz="${origin}"/>
-        <parent link="${parent}"/>
-        <child link="${child}"/>
-        <!-- axis of rotation, normalized -->
-        <axis xyz="${axis}"/>
-        <!-- limits of rotation (in radians) and movement -->
-        <!-- TODO it might be nice to figure out how to 'macro' pi
-        something like "${pi}" is possible but this is just a 
-        simple test for now... -->
-        <limit lower="-1.570796" upper="1.570796" effort="100" velocity="100"/>
-    </joint>
-</xacro:macro>
-
-<xacro:macro name="arm-segment" params="number origin size material">
-    <link name="s${number}">
-        <visual>
-            <origin xyz="${origin}"/>
-            <geometry>
-                <box size="${size}"/>
-            </geometry>
-            <material name="${material}"/> 
-        </visual>
-    </link>
-</xacro:macro>
-
-    <material name="white">
-        <color rgba="1 1 1 1"/>
-    </material>
-
-    <material name="blue">
-        <color rgba="0 0 1 1"/>
-    </material>
-
-    <material name="red">
-        <color rgba="1 0 0 1"/>
-    </material>
+    <xacro:include filename="macros.urdf.xacro"/> 
 
     <!-- Base link, true, non-relative 0,0,0 of world -->
     <link name="world"></link>
@@ -54,10 +17,8 @@
     </joint>
 
 
-
     <!-- the "Base" of the robotic arm -->
     <xacro:property name="base_dimensions" value="2 2 1.5"/>
-
     <link name="base">
         <visual>
             <!-- start slightly offset, so link is at base of cylinder -->
@@ -65,13 +26,11 @@
             <geometry>
                 <box size="${base_dimensions}"/>
             </geometry>
-            <material name="red"/>
+            <material name="cyan"/>
         </visual>
     </link>
 
 
-
-    <xacro:microServo parent="base" child="circle" origin="0 0 1.5" axis="0 0 1"/>
     
     <!-- TODO Should really come up with a better name for this part... -->
     <!-- Represents the 'circle' piece that sits above the base of the robot arm -->
@@ -92,6 +51,14 @@
         <origin xyz="0 0 0.0625"/>
     </joint>
 
+
+    <!-- The first real "arm" servo, may want to be +1 instead but will have to update servo code?-->
+    <xacro:microServo parent="base" child="circle" origin="0 0 1.5" axis="0 0 1"/>
+    <xacro:microServo parent="s0" child="s1" origin="0 0 0.25" axis="0 -1 0"/>
+    <xacro:microServo parent="s2" child="s3" origin="0 0 3" axis="0 -1 0"/>
+    <xacro:microServo parent="s3" child="grip-stick" origin="0 0 3" axis="0 0 1"/>
+    <xacro:microServo parent="s1" child="s2" origin="0 0 3" axis="0 -1 0"/>
+
     <!-- representation of base of the arm --> 
     <!-- between the circle and first real arm segment s1 -->
     <link name="s0">
@@ -104,17 +71,10 @@
         </visual>
     </link>
 
-    <!-- The first real "arm" servo, may want to be +1 instead but will have to update servo code?-->
-    <xacro:microServo parent="s0" child="s1" origin="0 0 0.25" axis="0 -1 0"/>
     <xacro:arm-segment number="1" origin="0 0 1.5" size="0.5 1.25 3" material="white"/>
-
-    <xacro:microServo parent="s1" child="s2" origin="0 0 3" axis="0 -1 0"/>
     <xacro:arm-segment number="2" origin="0 0 1.5" size="0.5 1.25 3" material="blue"/>
- 
-    <xacro:microServo parent="s2" child="s3" origin="0 0 3" axis="0 -1 0"/>
     <xacro:arm-segment number="3" origin="0 0 1.5" size="0.5 1.25 3" material="red"/>
-
-    <xacro:microServo parent="s3" child="grip-stick" origin="0 0 3" axis="0 0 1"/>
+ 
 
     <link name="grip-stick">
         <visual>
@@ -125,5 +85,14 @@
             <material name="white"/>
         </visual>
     </link>
+
+
+
+    <!-- Link in gazebo -->
+    <gazebo>
+        <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+            <robotNamespace>/</robotNamespace>
+        </plugin>
+    </gazebo>
 
 </robot>
