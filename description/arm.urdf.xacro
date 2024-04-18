@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="robot">
 
-    <xacro:include filename="macros.urdf.xacro"/> 
+    <xacro:include filename="macros.xacro"/> 
 
     <!-- Base link, true, non-relative 0,0,0 of world -->
     <link name="world"></link>
@@ -43,6 +43,13 @@
             </geometry>
             <material name="blue"/>
         </visual>
+        <collision>
+            <!-- start slightly offset, so link is at base of cylinder -->
+            <origin xyz="0 0 0.0625" rpy="0 0 0"/>
+            <geometry>
+                <cylinder radius="0.75" length="0.125"/>
+            </geometry>
+        </collision>
     </link>
 
     <joint name="circle-to-s0" type="fixed">
@@ -55,20 +62,23 @@
     <!-- The first real "arm" servo, may want to be +1 instead but will have to update servo code?-->
     <xacro:microServo parent="base" child="circle" origin="0 0 1.5" axis="0 0 1"/>
     <xacro:microServo parent="s0" child="s1" origin="0 0 0.25" axis="0 -1 0"/>
+    <xacro:microServo parent="s1" child="s2" origin="0 0 3" axis="0 -1 0"/>
     <xacro:microServo parent="s2" child="s3" origin="0 0 3" axis="0 -1 0"/>
     <xacro:microServo parent="s3" child="grip-stick" origin="0 0 3" axis="0 0 1"/>
-    <xacro:microServo parent="s1" child="s2" origin="0 0 3" axis="0 -1 0"/>
 
     <!-- representation of base of the arm --> 
     <!-- between the circle and first real arm segment s1 -->
     <link name="s0">
         <visual>
             <origin xyz="0 0 0.25"/>
-            <geometry>
-                <box size="0.5 1.25 0.5"/>
-            </geometry>
+            <geometry> <box size="0.5 1.25 0.5"/> </geometry>
             <material name="red"/>
         </visual>
+        <collision>
+            <origin xyz="0 0 0.25"/>
+            <geometry> <box size="0.5 1.25 0.5"/> </geometry>
+        </collision>
+
     </link>
 
     <xacro:arm-segment number="1" origin="0 0 1.5" size="0.5 1.25 3" material="white"/>
@@ -79,20 +89,23 @@
     <link name="grip-stick">
         <visual>
             <origin xyz="0 0.5 0.125" rpy="1.570796 0 0"/>  <!-- 'grip sticks' radius is offset -->
-            <geometry>
-                <cylinder length="1" radius="0.125"/>
-            </geometry>
+            <geometry> <cylinder length="1" radius="0.125"/> </geometry>
             <material name="white"/>
         </visual>
+        <collision>
+            <origin xyz="0 0.5 0.125" rpy="1.570796 0 0"/>  <!-- 'grip sticks' radius is offset -->
+            <geometry> <cylinder length="1" radius="0.125"/> </geometry>
+        </collision>
     </link>
 
-
-
     <!-- Link in gazebo -->
+    <xacro:include filename="gazebo.xacro"/> 
+    <!-- 
     <gazebo>
         <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
             <robotNamespace>/</robotNamespace>
         </plugin>
     </gazebo>
+    -->
 
 </robot>
