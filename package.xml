@@ -4,7 +4,7 @@
   <name>micro_robot_arm</name>
   <version>0.0.0</version>
   <description>Simple package for running micro robot arm</description>
-  <maintainer email="benlagreca02@gmail.com">ben</maintainer>
+  <maintainer email="benlagreca02@gmail.com">Ben</maintainer>
   <license>TODO: License declaration</license>
 
   <test_depend>ament_copyright</test_depend>
@@ -17,4 +17,6 @@
   </export>
 
   <depend>rclpy</depend>
+
+
 </package>
