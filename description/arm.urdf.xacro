@@ -116,7 +116,7 @@
 
 
     <xacro:property name="grip_stick_height" value="1"/>
-    <xacro:property name="grip_stick_radius" value="0.75"/>
+    <xacro:property name="grip_stick_radius" value="0.075"/>
     <xacro:property name="grip_stick_origin" value="0 0.5 0.125"/> 
     <xacro:property name="grip_stick_rpy" value="1.572 0 0"/> 
 

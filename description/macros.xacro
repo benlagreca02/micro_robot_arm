@@ -18,7 +18,7 @@
     </material>
 
     <xacro:macro name="microServo" params="parent child origin axis">
-        <joint name="${parent}-to-${child}-servo" type="revolute">
+        <joint name="${parent}_${child}_servo" type="revolute">
             <origin xyz="${origin}"/>
             <parent link="${parent}"/>
             <child link="${child}"/>
