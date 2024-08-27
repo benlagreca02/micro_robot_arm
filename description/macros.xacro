@@ -31,16 +31,6 @@
             <limit lower="-1.570796" upper="1.570796" effort="100" velocity="100"/>
         </joint>
 
-        <!--
-        <transmission name="${parent}-${child}-servo-trans">
-            <type>transmission_interface/SimpleTransmission</type>
-            <actuator name="${parent}-to-${child}">
-              <mechanicalReduction>1</mechanicalReduction>
-            </actuator>
-            <joint name="${parent}-to-${child}-servo">
-              <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
-            </joint>
-        </transmission> -->
     </xacro:macro>
 
     <xacro:macro name="arm-segment" params="number origin x y z material">

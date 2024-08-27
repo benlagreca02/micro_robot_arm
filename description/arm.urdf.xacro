@@ -3,9 +3,11 @@
 
     <xacro:include filename="macros.xacro"/> 
 
+    <!-- Link in gazebo file, which contains all of hte gazebo related things -->
+    <xacro:include filename="gazebo.xacro"/> 
+
     <!-- Base link, true, non-relative 0,0,0 of world -->
     <link name="world"></link>
-
 
     <joint name="world-to-base" type="fixed">
         <!-- The base of the arm is at 0,0,0 -->
@@ -15,7 +17,6 @@
         <!-- the 'child' link, or next in heirarchy -->
         <child link="base"/>
     </joint>
-
 
     <!-- the "Base" of the robotic arm -->
     <xacro:property name="base_x" value="2"/>
@@ -43,13 +44,9 @@
 
     </link>
 
-
-    
-    <!-- TODO Should really come up with a better name for this part... -->
     <!-- Represents the 'circle' piece that sits above the base of the robot arm -->
     <xacro:property name="circle_height" value="0.125"/>
     <xacro:property name="circle_radius" value="0.75"/>
-    <!-- TODO this should probably be different? not the cleanest way to do it -->
     <xacro:property name="circle_origin" value="0 0 0.0625"/>
     
     <link name="circle">
@@ -140,7 +137,5 @@
 
     </link>
 
-    <!-- Link in gazebo file, which contains all of hte gazebo related things -->
-    <xacro:include filename="gazebo.xacro"/> 
 
 </robot>
