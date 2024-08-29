@@ -32,21 +32,11 @@ listed below.
 : Launches robot state publisher and nothing more or less
 
 `rvizSim.launch.py`
-: Launches Rviz only (useless on its own)
+: Launches Rviz and the Joint State Publisher GUI (launch file useless on its own)
 
 `rspGazebo.launch.py`
 : Launches Robot state publisher, and Gazebo
 
-
-There is a simple launch file for starting the robot state publisher
-```bash
-ros2 launch micro_robot_arm robot_state_publisher.launch.py
-```
-
-Use this with Rviz and the joint state publisher gui
-```bash
-ros2 run joint_state_publisher_gui joint_state_publisher_gui
-```
 
 ## Helpful links
 [ROS link docs](http://wiki.ros.org/urdf/XML/link)
