@@ -11,6 +11,33 @@ gripper hasn't been implemented, however our 3D print of the arm has an unusable
 gripper.
 
 ## Usage
+You should have a "ros development workspace folder" (usually called `dev_ws`),
+and the project structure should be `dev_ws/src/micro_robot_arm`. From the
+`dev_ws` directory, run the following command to build and compile the package
+
+```bash
+colcon build --symlink-install
+```
+
+Next, you must source the project by running the following command. This assumes
+you are using bash as your shell.
+
+```bash
+source dev_ws/install/setup.bash
+```
+This allows you to run the various launch files provided by the package as
+listed below.
+
+`robot_state_publisher.launch.py`
+: Launches robot state publisher and nothing more or less
+
+`rvizSim.launch.py`
+: Launches Rviz only (useless on its own)
+
+`rspGazebo.launch.py`
+: Launches Robot state publisher, and Gazebo
+
+
 There is a simple launch file for starting the robot state publisher
 ```bash
 ros2 launch micro_robot_arm robot_state_publisher.launch.py
